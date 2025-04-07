@@ -174,3 +174,31 @@ def adjust_combat_strength(combat_strength, m_combat_strength):
             print("    |    ... Based on your previous game, neither the hero nor the monster's combat strength will be increased")
 
 
+def check_for_treasure_chest(hero, belt, loot_pool):
+    # Treasure chest only appears if hero is strong and healthy
+    if hero.health_points > 15 and hero.combat_strength > 5:
+        print("\n    💰 A hidden treasure chest appears before you!")
+        choice = input("    |    Do you want to open it? (yes/no): ").lower()
+
+        if choice.startswith("y"):
+            # Use list comprehension to filter out cursed items (just an example)
+            treasure_loot = [item for item in loot_pool if "Cursed" not in item]
+
+            # Randomly pick up to 2 items
+            import random
+            found_items = random.sample(treasure_loot, min(2, len(treasure_loot)))
+
+            print(f"    |    You found: {found_items}")
+
+            # Only add items if there’s space
+            if len(belt) + len(found_items) <= 5:
+                belt.extend(found_items)
+                print(f"    |    Your updated belt: {belt}")
+            else:
+                print("    |    Not enough space in your belt. You leave the treasure behind.")
+        else:
+            print("    |    You ignored the treasure chest.")
+    else:
+        print("    |    You feel like something magical was nearby... but it disappeared.")
+    return belt
+
